@@ -17,7 +17,7 @@ class VCRelativePos():
     zoom_main_monitor: int
     zoom_aux_monitor: int
 
-    zoom_switch_modes: bool = False
+    zoom_switch_modes: Optional[str] = None
 
     def move_windows(self):
         apps = [app for app in ui.apps() if app.name == "zoom.us"] + (
@@ -43,11 +43,17 @@ class VCRelativePos():
                 if multi_screen:
                     window_snap._move_to_screen(aux, screen_number=self.zoom_main_monitor)
                 window_snap._snap_window_helper(aux, self.zoom_aux_pos)
-            if self.zoom_switch_modes:
-                last_app = ui.active_app()
-                app.focus()
-                actions.key("cmd-shift-w")
-                last_app.focus()
+            if self.zoom_switch_modes is not None:
+                menu_bar = app.element.children.find_one(AXRole="AXMenuBar")
+                meeting_menu = menu_bar.children.find_one(AXTitle="Meeting").children[0]
+                try:
+                    switcher = meeting_menu.children.find_one(AXTitle=self.zoom_switch_modes)
+                    switcher.perform("AXPress")
+                except ui.UIErr as e:
+                    print(e, self.zoom_switch_modes, repr(meeting_menu), repr(meeting_menu.children))
+                    # If the view is already active (or axkit can't find the menu entry
+                    # yet), don't worry:
+                    pass
 
 _video_call_arrangements = {
     "one_on_one": VCRelativePos(
@@ -55,7 +61,7 @@ _video_call_arrangements = {
         zoom_aux_pos=RelativeScreenPos(0.42,0,0.56,0.16),
         zoom_main_monitor=1,
         zoom_aux_monitor=1,
-        zoom_switch_modes=True,
+        zoom_switch_modes="Speaker View",
         ft_pos=RelativeScreenPos(0,0,1,1),
     ),
     "gallery": VCRelativePos(
@@ -63,7 +69,7 @@ _video_call_arrangements = {
         zoom_aux_pos=RelativeScreenPos(0,0,1,1),
         zoom_main_monitor=1,
         zoom_aux_monitor=2,
-        zoom_switch_modes=True,
+        zoom_switch_modes="Gallery View",
         ft_pos=RelativeScreenPos(0,0,1,1),
     ),
     "screenshare": VCRelativePos(
