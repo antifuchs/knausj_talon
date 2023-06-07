@@ -1,10 +1,12 @@
 from typing import Optional
-from talon import ui, Module
+from talon import ui, Module, actions
 from dataclasses import dataclass
 from ..core.windows_and_tabs import window_snap
 from ..core.windows_and_tabs.window_snap import RelativeScreenPos
 
 mod = Module()
+
+ZOOM_VIEW_OPTIONS_BUTTON_DESC="View"
 
 @dataclass
 class VCRelativePos():
@@ -14,6 +16,8 @@ class VCRelativePos():
 
     zoom_main_monitor: int
     zoom_aux_monitor: int
+
+    zoom_switch_modes: bool = False
 
     def move_windows(self):
         apps = [app for app in ui.apps() if app.name == "zoom.us"] + (
@@ -27,20 +31,23 @@ class VCRelativePos():
             window_snap._snap_window_helper(win, pos=self.ft_pos)
         elif app.name == "zoom.us":
             main_wins = [win for win in app.windows() if win.title == "Zoom Meeting"]
-            if len(main_wins) == 0:
-                return
-            main = main_wins[0]
-            if multi_screen:
-                window_snap._move_to_screen(main, screen_number=self.zoom_main_monitor)
-            window_snap._snap_window_helper(main, self.zoom_main_pos)
+            if len(main_wins) >= 0:
+                main = main_wins[0]
+                if multi_screen:
+                    window_snap._move_to_screen(main, screen_number=self.zoom_main_monitor)
+                window_snap._snap_window_helper(main, self.zoom_main_pos)
 
             aux_wins = [win for win in app.windows() if win.title != "Zoom Meeting"]
-            if len(aux_wins) == 0:
-                return
-            aux = aux_wins[0]
-            if multi_screen:
-                window_snap._move_to_screen(aux, screen_number=self.zoom_main_monitor)
-            window_snap._snap_window_helper(aux, self.zoom_aux_pos)
+            if len(aux_wins) > 0:
+                aux = aux_wins[0]
+                if multi_screen:
+                    window_snap._move_to_screen(aux, screen_number=self.zoom_main_monitor)
+                window_snap._snap_window_helper(aux, self.zoom_aux_pos)
+            if self.zoom_switch_modes:
+                last_app = ui.active_app()
+                app.focus()
+                actions.key("cmd-shift-w")
+                last_app.focus()
 
 _video_call_arrangements = {
     "one_on_one": VCRelativePos(
@@ -48,6 +55,7 @@ _video_call_arrangements = {
         zoom_aux_pos=RelativeScreenPos(0.42,0,0.56,0.16),
         zoom_main_monitor=1,
         zoom_aux_monitor=1,
+        zoom_switch_modes=True,
         ft_pos=RelativeScreenPos(0,0,1,1),
     ),
     "gallery": VCRelativePos(
@@ -55,6 +63,7 @@ _video_call_arrangements = {
         zoom_aux_pos=RelativeScreenPos(0,0,1,1),
         zoom_main_monitor=1,
         zoom_aux_monitor=2,
+        zoom_switch_modes=True,
         ft_pos=RelativeScreenPos(0,0,1,1),
     ),
     "screenshare": VCRelativePos(
@@ -77,17 +86,3 @@ class Actions:
         "Arranges video call windows in the requested layout"
         arrangement = _video_call_arrangements[arrangement_name]
         arrangement.move_windows()
-
-def _find_video_chat_main_window():
-    "Find the 'main' video chat window, facetime or zoom"
-    apps = [app for app in ui.apps() if app.name == "zoom.us"] + (
-        [app for app in ui.apps() if app.name == "FaceTime"])
-    if len(apps) == 0:
-        return None
-    app = apps[0]
-    # Find the main window:
-    if app.name == "zoom.us":
-        main = [win for win in app.windows() if win.title == "Zoom Meeting"]
-        return main[0] if len(main) > 0 else None
-    else:
-        return app.windows()[0]
