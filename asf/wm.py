@@ -44,7 +44,7 @@ class VCRelativePos():
                     window_snap._move_to_screen(aux, screen_number=self.zoom_main_monitor)
                 window_snap._snap_window_helper(aux, self.zoom_aux_pos)
             if self.zoom_switch_modes is not None:
-                menu_bar = app.element.children.find_one(AXRole="AXMenuBar")
+                menu_bar = app.children.find_one(AXRole="AXMenuBar")
                 meeting_menu = menu_bar.children.find_one(AXTitle="Meeting").children[0]
                 try:
                     switcher = meeting_menu.children.find_one(AXTitle=self.zoom_switch_modes)
