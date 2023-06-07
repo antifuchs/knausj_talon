@@ -1,5 +1,5 @@
 from typing import Optional
-from talon import ui, Module
+from talon import ui, Module, actions
 
 mod = Module()
 
@@ -22,6 +22,14 @@ class Actions:
         for path in [path1, path2]:
             if _just_activate(path):
                 return
+
+    def toggle_active_app(path: str):
+        "Activate a running app if it's not active, otherwise hide it."
+        app = running_app_by_path(path)
+        if ui.active_app() != app:
+            app.focus()
+        else:
+            actions.key("cmd-h")
 
 def _just_activate(path: Optional[str] = None, name: Optional[str] = None) -> bool:
     "Activate an app at the given path, if it's running"

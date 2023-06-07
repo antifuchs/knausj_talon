@@ -25,3 +25,8 @@ key(shift-alt-ctrl-cmd-8):
 
 key(shift-alt-ctrl-cmd-9):
   user.launch_and_activate("/Applications/BusyCal.app")
+
+key(f18): user.toggle_active_app("/Applications/Dash.app")
+key(alt-cmd-ctrl-space): user.toggle_active_app("/Applications/Dash.app")
+
+key(f19): user.toggle_active_app("/Applications/LaunchBar.app")
