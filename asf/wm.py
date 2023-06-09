@@ -37,7 +37,8 @@ class VCRelativePos():
                     window_snap._move_to_screen(main, screen_number=self.zoom_main_monitor)
                 window_snap._snap_window_helper(main, self.zoom_main_pos)
 
-            aux_wins = [win for win in app.windows() if win.title != "Zoom Meeting"]
+            aux_wins = [win for win in app.windows() if win.title == "Zoom" and win.children[0].get("AXRoleDescription") == "video render"]
+            print("aux windows", aux_wins)
             if len(aux_wins) > 0:
                 aux = aux_wins[0]
                 if multi_screen:
