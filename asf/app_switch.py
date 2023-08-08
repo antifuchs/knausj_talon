@@ -13,6 +13,11 @@ class Actions:
         "Activate an app at the given path, if it's running"
         _just_activate(path=path)
 
+    def just_activate_and_key(path: str, keyseq: str):
+        "Activate an app at the given path, if it's running; then send a key sequence"
+        _just_activate(path=path)
+        actions.key(keyseq)
+
     def just_activate_n(name: str):
         "Activate an app with the given name, if it's running"
         _just_activate(name=name)

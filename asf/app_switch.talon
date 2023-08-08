@@ -12,7 +12,7 @@ key(shift-alt-ctrl-cmd-4):
   user.just_activate("/Applications/Slack.app")
 
 key(shift-alt-ctrl-cmd-5):
-  user.just_activate("/Applications/Mimestream.app")
+  user.just_activate_and_key("/Applications/Mimestream.app", "cmd-0")
 
 key(shift-alt-ctrl-cmd-6):
   user.just_activate_preferred("/System/Applications/FaceTime.app", "/Applications/zoom.us.app")
@@ -26,6 +26,7 @@ key(shift-alt-ctrl-cmd-8):
 key(shift-alt-ctrl-cmd-9):
   user.launch_and_activate("/Applications/BusyCal.app")
 
+# Note: Dash needs the "Dismiss main window when I activate a different app" setting turned ON.
 key(f18): user.toggle_active_app("/Applications/Dash.app")
 key(alt-cmd-ctrl-space): user.toggle_active_app("/Applications/Dash.app")
 
