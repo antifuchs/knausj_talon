@@ -26,6 +26,9 @@ key(shift-alt-ctrl-cmd-8):
 key(shift-alt-ctrl-cmd-9):
   user.launch_and_activate("/Applications/BusyCal.app")
 
+key(shift-alt-ctrl-cmd-0):
+  user.launch_and_activate("/Applications/Obsidian.app")
+
 # Dash needs the shortcut alt-ctrl-cmd-space defined:
 key(f18): key(alt-ctrl-cmd-space)
 
