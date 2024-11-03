@@ -1,5 +1,6 @@
+import time
 from typing import Optional
-from talon import ui, Module, actions
+from talon import ui, Module, actions, screen
 from dataclasses import dataclass
 from ..core.windows_and_tabs import window_snap
 from ..core.windows_and_tabs.window_snap import RelativeScreenPos
@@ -82,6 +83,61 @@ _video_call_arrangements = {
     ),
 }
 
+@dataclass
+class AppArrangement():
+    app: str
+    window: Optional[str]
+    pos: RelativeScreenPos
+
+_maximized=RelativeScreenPos(0, 0, 1, 1)
+
+def _vertical_max(x0, xend):
+    return RelativeScreenPos(x0, 0, xend, 1)
+
+_app_arrangements = {
+    'laptop': [
+        AppArrangement(app="Mimestream", window="Inbox", pos=_maximized),
+        AppArrangement(app="Emacs", window=None, pos=_maximized),
+        AppArrangement(app="Arc", window=None, pos=_maximized),
+        AppArrangement(app="Slack", window=None, pos=_maximized),
+        AppArrangement(app="iTerm2", window=None, pos=_maximized),
+        AppArrangement(app="Messages", window=None, pos=_vertical_max(0, 0.35)),
+        AppArrangement(app="Element", window=None, pos=_vertical_max(0, 0.8)),
+        AppArrangement(app="Music", window="Music", pos=_maximized)
+    ],
+    "large_screen": [
+        AppArrangement(app="Mimestream", window="Inbox", pos=_vertical_max(0.08, 0.59)),
+        AppArrangement(app="Emacs", window=None, pos=_maximized),
+        AppArrangement(app="Arc", window=None, pos=_vertical_max(0.17, 0.85)),
+        AppArrangement(app="Slack", window=None, pos=_vertical_max(0.55, 1)),
+        AppArrangement(app="iTerm2", window=None, pos=_vertical_max(0, 0.5)),
+        AppArrangement(app="Messages", window=None, pos=_vertical_max(0, 0.27)),
+        AppArrangement(app="Element", window=None, pos=_vertical_max(0.05, 0.49)),
+        AppArrangement(app="Music", window="Music", pos=_vertical_max(0.19, 0.77))
+    ],
+    "multi_screen": [
+        # TODO, same as single atm
+        AppArrangement(app="Mimestream", window="Inbox", pos=_vertical_max(0.08, 0.59)),
+        AppArrangement(app="Emacs", window=None, pos=_maximized),
+        AppArrangement(app="Arc", window=None, pos=_vertical_max(0.17, 0.85)),
+        AppArrangement(app="Slack", window=None, pos=_vertical_max(0.55, 1)),
+        AppArrangement(app="iTerm2", window=None, pos=_vertical_max(0, 0.5)),
+        AppArrangement(app="Messages", window=None, pos=_vertical_max(0, 0.27)),
+        AppArrangement(app="Element", window=None, pos=_vertical_max(0.05, 0.49)),
+        AppArrangement(app="Music", window="Music", pos=_vertical_max(0.19, 0.77))
+    ]
+}
+
+def _determine_layout():
+    screens = screen.screens()
+    main_screen = [scr for scr in screens if scr.main][0]
+    if main_screen.mm_x < 500:
+        return "laptop"
+    elif screens.len() == 1:
+        return "large_screen"
+    else:
+        return "multi_screen"
+
 @mod.action_class
 class Actions:
     def translate_snap_name(name: str) -> RelativeScreenPos:
@@ -93,3 +149,33 @@ class Actions:
         "Arranges video call windows in the requested layout"
         arrangement = _video_call_arrangements[arrangement_name]
         arrangement.move_windows()
+
+    def layout_all_windows():
+        "Arranges all windows according to their defined positions"
+        arrangements = _app_arrangements[_determine_layout()]
+        for window_style in arrangements:
+            # find the app/window and then apply the size to it.
+            for app in [app for app in ui.apps() if app.name == window_style.app]:
+                app_hidden = app.element.AXHidden
+                if app_hidden:
+                    app.element.AXHidden = False
+                    # wait until the windows' rects can be retrieved:
+                    for i in range(20):
+                        try:
+                            for window in app.windows():
+                                window.rect
+                        except AttributeError:
+                            time.sleep(0.1)
+                        else:
+                            break
+                for window in app.windows():
+                    if window_style.window is None or window.title == window_style.window:
+                        # acquire permission to move the window fast
+                        try:
+                            app_script = window.appscript()
+                            if hasattr(window, "bounds"):
+                                app_script.bounds()
+                        except AttributeError:
+                            pass
+                        window_snap._snap_window_helper(window, window_style.pos)
+                app.element.AXHidden = app_hidden
