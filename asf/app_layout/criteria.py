@@ -1,5 +1,5 @@
 from typing import Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from abc import ABC, abstractmethod
 from talon.ui import Window
 
@@ -23,3 +23,14 @@ class EmacsMatch(WindowCriteria):
 
     def matching_windows(self, windows: Sequence[Window]) -> list[Window]:
         return [win for win in windows if win.element.get('AXTitleUIElement', None) is not None]
+
+@dataclass
+class MimestreamMatch(WindowCriteria):
+    "Matches the mimestream main window"
+
+    compose_window: bool = field(default=True)
+
+    def matching_windows(self, windows: Sequence[Window]) -> list[Window]:
+        def _is_window_compose(win):
+            return win.children[0].get('AXRoleDescription') == 'text'
+        return [win for win in windows if _is_window_compose(win) == self.compose_window]
