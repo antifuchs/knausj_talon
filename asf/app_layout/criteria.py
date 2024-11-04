@@ -28,7 +28,7 @@ class EmacsMatch(WindowCriteria):
 class MimestreamMatch(WindowCriteria):
     "Matches the mimestream main window"
 
-    compose_window: bool = field(default=True)
+    compose_window: bool = field(default=False)
 
     def matching_windows(self, windows: Sequence[Window]) -> list[Window]:
         def _is_window_compose(win):
