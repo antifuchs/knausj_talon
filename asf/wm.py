@@ -1,6 +1,7 @@
 import time
 from typing import Optional
 from talon import ui, Module, actions, screen
+from talon.ui import App
 from dataclasses import dataclass
 from ..core.windows_and_tabs import window_snap
 from ..core.windows_and_tabs.window_snap import RelativeScreenPos
@@ -139,6 +140,34 @@ def _determine_layout():
     else:
         return "multi_screen"
 
+def _layout_app(window_style: AppArrangement,  app: App):
+    app_hidden = app.element.AXHidden
+    if app_hidden:
+        app.element.AXHidden = False
+        # wait until the windows' rects can be retrieved:
+        for _ in range(20):
+            try:
+                for window in app.windows():
+                    window.rect
+            except AttributeError:
+                time.sleep(0.1)
+            else:
+                break
+    matching_windows = app.windows()
+    if window_style.window is not None:
+        matching_windows = window_style.window.matching_windows(matching_windows)
+    for window in matching_windows:
+        # acquire permission to move the window fast
+        try:
+            app_script = window.appscript()
+            if hasattr(window, "bounds"):
+                app_script.bounds()
+        except AttributeError:
+            pass
+        window_snap._snap_window_helper(window, window_style.pos)
+    app.element.AXHidden = app_hidden
+
+
 @mod.action_class
 class Actions:
     def translate_snap_name(name: str) -> RelativeScreenPos:
@@ -157,28 +186,18 @@ class Actions:
         for window_style in arrangements:
             # find the app/window and then apply the size to it.
             for app in [app for app in ui.apps() if app.name == window_style.app]:
-                app_hidden = app.element.AXHidden
-                if app_hidden:
-                    app.element.AXHidden = False
-                    # wait until the windows' rects can be retrieved:
-                    for i in range(20):
-                        try:
-                            for window in app.windows():
-                                window.rect
-                        except AttributeError:
-                            time.sleep(0.1)
-                        else:
-                            break
-                matching_windows = app.windows()
-                if window_style.window is not None:
-                    matching_windows = window_style.window.matching_windows(matching_windows)
-                for window in matching_windows:
-                    # acquire permission to move the window fast
-                    try:
-                        app_script = window.appscript()
-                        if hasattr(window, "bounds"):
-                            app_script.bounds()
-                    except AttributeError:
-                        pass
-                    window_snap._snap_window_helper(window, window_style.pos)
-                app.element.AXHidden = app_hidden
+                _layout_app(window_style, app)
+
+# Register our interest in newly-launched apps:
+def _handle_app_launch(app):
+    "Notices that an app was launched and puts its windows where we'd expect them."
+    for window_style in _app_arrangements[_determine_layout()]:
+        if window_style.app == app.name:
+            # Give it 2 seconds to bring up a window:
+            for _ in range(20):
+                if len(app.windows()) > 0:
+                    break
+                time.sleep(0.1)
+            _layout_app(window_style, app)
+
+ui.register("app_launch", _handle_app_launch)
