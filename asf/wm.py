@@ -133,7 +133,7 @@ def _determine_layout():
     main_screen = [scr for scr in screens if scr.main][0]
     if main_screen.mm_x < 500:
         return "laptop"
-    elif screens.len() == 1:
+    elif len(screens) == 1:
         return "large_screen"
     else:
         return "multi_screen"
