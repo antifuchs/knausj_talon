@@ -170,6 +170,15 @@ def _layout_app(window_style: AppArrangement,  app: App):
         window_snap._snap_window_helper(window, window_style.pos)
     app.element.AXHidden = app_hidden
 
+def _layout_all_apps():
+    "Detects the current screen arrangement and layouts apps on it."
+    layout = _determine_layout()
+    if layout in _app_arrangements:
+        for window_style in _app_arrangements[layout]:
+            for app in [app for app in ui.apps() if app.name == window_style.app]:
+                _layout_app(window_style, app)
+    else:
+        print(f"layout {layout} isn't configured in app arrangements")
 
 @mod.action_class
 class Actions:
@@ -185,11 +194,7 @@ class Actions:
 
     def layout_all_windows():
         "Arranges all windows according to their defined positions"
-        arrangements = _app_arrangements[_determine_layout()]
-        for window_style in arrangements:
-            # find the app/window and then apply the size to it.
-            for app in [app for app in ui.apps() if app.name == window_style.app]:
-                _layout_app(window_style, app)
+        _layout_all_apps()
 
 # Register our interest in newly-launched apps:
 def _handle_app_launch(app):
@@ -207,14 +212,6 @@ ui.register("app_launch", _handle_app_launch)
 
 
 # Register our interest in screen arrangement changes:
-def _handle_screen_change():
-    layout = _determine_layout()
-    if layout in _app_arrangements:
-        for window_style in _app_arrangements[layout]:
-            for app in [app for app in ui.apps() if app.name == window_style.app]:
-                _layout_app(window_style, app)
-
-
 def _listen_for_screen_change():
     _last_screen_config = []
     def _current_screens():
@@ -224,7 +221,7 @@ def _listen_for_screen_change():
         nonlocal _last_screen_config
         if _current_screens() != _last_screen_config:
             print(f"Detected screen configuration change: {_last_screen_config} vs {_current_screens()}")
-            _handle_screen_change()
+            _layout_all_apps()
         _last_screen_config = _current_screens()
     _screen_change_check()
     cron.interval("5s", _screen_change_check)
