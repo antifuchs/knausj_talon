@@ -1,6 +1,6 @@
 import time
 from typing import Optional
-from talon import ui, Module, actions, screen
+from talon import ui, Module, actions, screen, cron, app
 from talon.ui import App
 from dataclasses import dataclass
 from ..core.windows_and_tabs import window_snap
@@ -204,3 +204,29 @@ def _handle_app_launch(app):
             _layout_app(window_style, app)
 
 ui.register("app_launch", _handle_app_launch)
+
+
+# Register our interest in screen arrangement changes:
+def _handle_screen_change():
+    layout = _determine_layout()
+    if layout in _app_arrangements:
+        for window_style in _app_arrangements[layout]:
+            for app in [app for app in ui.apps() if app.name == window_style.app]:
+                _layout_app(window_style, app)
+
+
+def _listen_for_screen_change():
+    _last_screen_config = []
+    def _current_screens():
+        return [(round(scr.mm_x), scr.main) for scr in screen.screens()]
+
+    def _screen_change_check():
+        nonlocal _last_screen_config
+        if _current_screens() != _last_screen_config:
+            print(f"Detected screen configuration change: {_last_screen_config} vs {_current_screens()}")
+            _handle_screen_change()
+        _last_screen_config = _current_screens()
+    _screen_change_check()
+    cron.interval("5s", _screen_change_check)
+
+app.register("ready", _listen_for_screen_change)
