@@ -12,7 +12,7 @@ key(shift-alt-ctrl-cmd-4):
   user.just_activate("/Applications/Slack.app")
 
 key(shift-alt-ctrl-cmd-5):
-  user.just_activate_and_key("/Applications/Mimestream.app", "cmd-0")
+  user.just_activate("/Users/asf/Applications/Fastmail.app")
 
 key(shift-alt-ctrl-cmd-6):
   user.just_activate_preferred("/System/Applications/FaceTime.app", "/Applications/zoom.us.app")
