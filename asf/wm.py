@@ -100,6 +100,7 @@ _app_arrangements = {
     'laptop': [
         AppArrangement(app="Mimestream", window=MimestreamMatch(False), pos=_maximized),
         AppArrangement(app="Mimestream", window=MimestreamMatch(True), pos=_vertical_max(0.2, 0.8)),
+        AppArrangement(app="Fastmail", window=None, pos=_maximized),
         AppArrangement(app="Emacs", window=EmacsMatch(), pos=_maximized),
         AppArrangement(app="Arc", window=None, pos=_maximized),
         AppArrangement(app="Slack", window=None, pos=_maximized),
@@ -111,6 +112,7 @@ _app_arrangements = {
     "large_screen": [
         AppArrangement(app="Mimestream", window=MimestreamMatch(), pos=_vertical_max(0.08, 0.59)),
         AppArrangement(app="Mimestream", window=MimestreamMatch(True), pos=_vertical_max(0.1, 0.4)),
+        AppArrangement(app="Fastmail", window=None, pos=_vertical_max(0.08, 0.59)),
         AppArrangement(app="Emacs", window=EmacsMatch(), pos=_maximized),
         AppArrangement(app="Arc", window=None, pos=_vertical_max(0.17, 0.85)),
         AppArrangement(app="Slack", window=None, pos=_vertical_max(0.55, 1)),
@@ -123,6 +125,7 @@ _app_arrangements = {
         # TODO, same as single atm
         AppArrangement(app="Mimestream", window=MimestreamMatch(), pos=_vertical_max(0.08, 0.59)),
         AppArrangement(app="Mimestream", window=MimestreamMatch(True), pos=_vertical_max(0.1, 0.4)),
+        AppArrangement(app="Fastmail", window=None, pos=_vertical_max(0.08, 0.59)),
         AppArrangement(app="Emacs", window=EmacsMatch(), pos=_maximized),
         AppArrangement(app="Arc", window=None, pos=_vertical_max(0.17, 0.85)),
         AppArrangement(app="Slack", window=None, pos=_vertical_max(0.55, 1)),
