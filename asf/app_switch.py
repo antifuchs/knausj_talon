@@ -28,6 +28,12 @@ class Actions:
             if _just_activate(path):
                 return
 
+    def just_activate_preferred_n(name1: str, name2: str):
+        "Activate one of these apps by name, by order of preference, if they're running."
+        for name in [name1, name2]:
+            if _just_activate(name=name):
+                return
+
     def toggle_active_app(path: str):
         "Activate a running app if it's not active, otherwise hide it."
         app = running_app_by_path(path)

@@ -1,6 +1,6 @@
 -
 key(shift-alt-ctrl-cmd-1):
-  user.just_activate_n("Emacs")
+  user.just_activate_preferred_n("Emacs", "Code")
 
 key(shift-alt-ctrl-cmd-2):
   user.just_activate("/Applications/Arc.app")
