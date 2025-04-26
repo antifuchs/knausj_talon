@@ -6,7 +6,7 @@ key(shift-alt-ctrl-cmd-2):
   user.just_activate("/Applications/Arc.app")
 
 key(shift-alt-ctrl-cmd-3):
-  user.just_activate("/Applications/iTerm.app")
+  user.just_activate("/Applications/WezTerm.app")
 
 key(shift-alt-ctrl-cmd-4):
   user.just_activate("/Applications/Slack.app")
