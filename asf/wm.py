@@ -189,7 +189,10 @@ def _determine_layout():
 
 
 def _layout_app(window_style: AppArrangement, app: App):
-    app_hidden = app.element.AXHidden
+    try:
+        app_hidden = app.element.AXHidden
+    except AttributeError:
+        return
     if app_hidden:
         app.element.AXHidden = False
         # wait until the windows' rects can be retrieved:
