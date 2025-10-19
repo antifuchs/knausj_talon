@@ -200,6 +200,7 @@ def _layout_app(window_style: AppArrangement, app: App):
             try:
                 for window in app.windows():
                     window.rect
+                    window.screen.visible_rect
             except AttributeError:
                 time.sleep(0.1)
             else:
