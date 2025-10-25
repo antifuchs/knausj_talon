@@ -204,6 +204,7 @@ def _layout_app(window_style: AppArrangement, app: App):
             except AttributeError:
                 time.sleep(0.1)
             else:
+                app.element.AXHidden = app_hidden
                 break
     matching_windows = app.windows()
     if window_style.window is not None:
@@ -214,12 +215,12 @@ def _layout_app(window_style: AppArrangement, app: App):
             app_script = window.appscript()
             if hasattr(window, "bounds"):
                 app_script.bounds()
+            window_snap._snap_window_helper(window, window_style.pos)
         except AttributeError:
             pass
         except Exception as e:
             print(f"Could not layout app windows for {app.name}: {e}")
             pass
-        window_snap._snap_window_helper(window, window_style.pos)
     app.element.AXHidden = app_hidden
 
 
