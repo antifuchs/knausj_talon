@@ -1,4 +1,5 @@
 import time
+import traceback
 from typing import Optional
 from talon import ui, Module, actions, screen, cron, app
 from talon.ui import App
@@ -121,10 +122,6 @@ def _vertical_max(x0, xend):
 
 _app_arrangements = {
     "laptop": [
-        AppArrangement(app="Mimestream", window=MimestreamMatch(False), pos=_maximized),
-        AppArrangement(
-            app="Mimestream", window=MimestreamMatch(True), pos=_vertical_max(0.2, 0.8)
-        ),
         AppArrangement(app="Fastmail", window=None, pos=_maximized),
         AppArrangement(app="Emacs", window=EmacsMatch(), pos=_maximized),
         AppArrangement(app="Arc", window=None, pos=_maximized),
@@ -136,12 +133,6 @@ _app_arrangements = {
         AppArrangement(app="Music", window=NameMatch("Music"), pos=_maximized),
     ],
     "large_screen": [
-        AppArrangement(
-            app="Mimestream", window=MimestreamMatch(), pos=_vertical_max(0.08, 0.59)
-        ),
-        AppArrangement(
-            app="Mimestream", window=MimestreamMatch(True), pos=_vertical_max(0.1, 0.4)
-        ),
         AppArrangement(app="Fastmail", window=None, pos=_vertical_max(0.08, 0.59)),
         AppArrangement(app="Emacs", window=EmacsMatch(), pos=_maximized),
         AppArrangement(app="Arc", window=None, pos=_vertical_max(0.17, 0.85)),
@@ -156,12 +147,6 @@ _app_arrangements = {
     ],
     "multi_screen": [
         # TODO, same as single atm
-        AppArrangement(
-            app="Mimestream", window=MimestreamMatch(), pos=_vertical_max(0.08, 0.59)
-        ),
-        AppArrangement(
-            app="Mimestream", window=MimestreamMatch(True), pos=_vertical_max(0.1, 0.4)
-        ),
         AppArrangement(app="Fastmail", window=None, pos=_vertical_max(0.08, 0.59)),
         AppArrangement(app="Emacs", window=EmacsMatch(), pos=_maximized),
         AppArrangement(app="Arc", window=None, pos=_vertical_max(0.17, 0.85)),
@@ -209,17 +194,15 @@ def _layout_app(window_style: AppArrangement, app: App):
     matching_windows = app.windows()
     if window_style.window is not None:
         matching_windows = window_style.window.matching_windows(matching_windows)
+    print(f"Found matching windows for app {app.name} {matching_windows}")
     for window in matching_windows:
         # acquire permission to move the window fast
         try:
-            app_script = window.appscript()
-            if hasattr(window, "bounds"):
-                app_script.bounds()
             window_snap._snap_window_helper(window, window_style.pos)
-        except AttributeError:
-            pass
         except Exception as e:
-            print(f"Could not layout app windows for {app.name}: {e}")
+            print(
+                f"Could not layout window {window} of app {app.name}: {e}\n{traceback.format_exc()}"
+            )
             pass
     app.element.AXHidden = app_hidden
 
