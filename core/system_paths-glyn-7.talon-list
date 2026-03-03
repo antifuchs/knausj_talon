@@ -1,0 +1,16 @@
+list: user.system_paths
+hostname: glyn-7
+-
+user: /Users/asf
+desktop: /Users/asf/Desktop
+desk: /Users/asf/Desktop
+documents: /Users/asf/Documents
+docks: /Users/asf/Documents
+downloads: /Users/asf/Downloads
+music: /Users/asf/Music
+pictures: /Users/asf/Pictures
+videos: /Users/asf/Videos
+talon home: /Users/asf/.talon
+talon recordings: /Users/asf/.talon/recordings
+talon user: /Users/asf/.talon/user
+home: /Users/asf

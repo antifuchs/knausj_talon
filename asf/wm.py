@@ -6,7 +6,7 @@ from talon.ui import App
 from dataclasses import dataclass
 from ..core.windows_and_tabs import window_snap
 from ..core.windows_and_tabs.window_snap import RelativeScreenPos
-from .app_layout.criteria import MimestreamMatch, WindowCriteria, EmacsMatch, NameMatch
+from .app_layout.criteria import MimestreamMatch, WindowCriteria, NameMatch
 
 mod = Module()
 
@@ -123,7 +123,7 @@ def _vertical_max(x0, xend):
 _app_arrangements = {
     "laptop": [
         AppArrangement(app="Fastmail", window=None, pos=_maximized),
-        AppArrangement(app="Emacs", window=EmacsMatch(), pos=_maximized),
+        AppArrangement(app="Gram", window=None, pos=_maximized),
         AppArrangement(app="Arc", window=None, pos=_maximized),
         AppArrangement(app="Slack", window=None, pos=_maximized),
         AppArrangement(app="WezTerm", window=None, pos=_maximized),
@@ -134,7 +134,7 @@ _app_arrangements = {
     ],
     "large_screen": [
         AppArrangement(app="Fastmail", window=None, pos=_vertical_max(0.08, 0.59)),
-        AppArrangement(app="Emacs", window=EmacsMatch(), pos=_maximized),
+        AppArrangement(app="Gram", window=None, pos=_maximized),
         AppArrangement(app="Arc", window=None, pos=_vertical_max(0.17, 0.85)),
         AppArrangement(app="Slack", window=None, pos=_vertical_max(0.55, 1)),
         AppArrangement(app="WezTerm", window=None, pos=_vertical_max(0, 0.5)),
@@ -148,7 +148,7 @@ _app_arrangements = {
     "multi_screen": [
         # TODO, same as single atm
         AppArrangement(app="Fastmail", window=None, pos=_vertical_max(0.08, 0.59)),
-        AppArrangement(app="Emacs", window=EmacsMatch(), pos=_maximized),
+        AppArrangement(app="Gram", window=None, pos=_maximized),
         AppArrangement(app="Arc", window=None, pos=_vertical_max(0.17, 0.85)),
         AppArrangement(app="Slack", window=None, pos=_vertical_max(0.55, 1)),
         AppArrangement(app="WezTerm", window=None, pos=_vertical_max(0, 0.5)),
