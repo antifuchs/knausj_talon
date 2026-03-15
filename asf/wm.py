@@ -1,12 +1,14 @@
 import time
 import traceback
-from typing import Optional
-from talon import ui, Module, actions, screen, cron, app
-from talon.ui import App
 from dataclasses import dataclass
+from typing import Optional
+
+from talon import Module, actions, app, cron, screen, ui
+from talon.ui import App
+
 from ..core.windows_and_tabs import window_snap
 from ..core.windows_and_tabs.window_snap import RelativeScreenPos
-from .app_layout.criteria import MimestreamMatch, WindowCriteria, NameMatch
+from .app_layout.criteria import MimestreamMatch, NameMatch, WindowCriteria
 
 mod = Module()
 
@@ -126,6 +128,7 @@ _app_arrangements = {
         AppArrangement(app="Gram", window=None, pos=_maximized),
         AppArrangement(app="Arc", window=None, pos=_maximized),
         AppArrangement(app="Slack", window=None, pos=_maximized),
+        AppArrangement(app="Ghostty", window=None, pos=_maximized),
         AppArrangement(app="WezTerm", window=None, pos=_maximized),
         AppArrangement(app="iTerm2", window=None, pos=_maximized),
         AppArrangement(app="Messages", window=None, pos=_vertical_max(0, 0.35)),
@@ -137,6 +140,7 @@ _app_arrangements = {
         AppArrangement(app="Gram", window=None, pos=_maximized),
         AppArrangement(app="Arc", window=None, pos=_vertical_max(0.17, 0.85)),
         AppArrangement(app="Slack", window=None, pos=_vertical_max(0.55, 1)),
+        AppArrangement(app="Ghostty", window=None, pos=_vertical_max(0, 0.5)),
         AppArrangement(app="WezTerm", window=None, pos=_vertical_max(0, 0.5)),
         AppArrangement(app="iTerm2", window=None, pos=_vertical_max(0, 0.5)),
         AppArrangement(app="Messages", window=None, pos=_vertical_max(0, 0.27)),
@@ -151,6 +155,7 @@ _app_arrangements = {
         AppArrangement(app="Gram", window=None, pos=_maximized),
         AppArrangement(app="Arc", window=None, pos=_vertical_max(0.17, 0.85)),
         AppArrangement(app="Slack", window=None, pos=_vertical_max(0.55, 1)),
+        AppArrangement(app="Ghostty", window=None, pos=_vertical_max(0, 0.5)),
         AppArrangement(app="WezTerm", window=None, pos=_vertical_max(0, 0.5)),
         AppArrangement(app="iTerm2", window=None, pos=_vertical_max(0, 0.5)),
         AppArrangement(app="Messages", window=None, pos=_vertical_max(0, 0.27)),
