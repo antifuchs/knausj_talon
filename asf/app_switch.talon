@@ -18,7 +18,7 @@ key(shift-alt-ctrl-cmd-6):
   user.just_activate_preferred("/System/Applications/FaceTime.app", "/Applications/zoom.us.app")
 
 key(shift-alt-ctrl-cmd-7):
-  user.just_activate("/Applications/bIRC.app")
+  user.just_activate("/Applications/Halloy.app")
 
 key(shift-alt-ctrl-cmd-8):
   user.launch_and_activate("/System/Applications/Messages.app")
