@@ -126,7 +126,7 @@ _app_arrangements = {
     "laptop": [
         AppArrangement(app="Fastmail", window=None, pos=_maximized),
         AppArrangement(app="Gram", window=None, pos=_maximized),
-        AppArrangement(app="Arc", window=None, pos=_maximized),
+        AppArrangement(app="Zen", window=None, pos=_maximized),
         AppArrangement(app="Slack", window=None, pos=_maximized),
         AppArrangement(app="Ghostty", window=None, pos=_maximized),
         AppArrangement(app="WezTerm", window=None, pos=_maximized),
@@ -138,7 +138,7 @@ _app_arrangements = {
     "large_screen": [
         AppArrangement(app="Fastmail", window=None, pos=_vertical_max(0.08, 0.59)),
         AppArrangement(app="Gram", window=None, pos=_maximized),
-        AppArrangement(app="Arc", window=None, pos=_vertical_max(0.17, 0.85)),
+        AppArrangement(app="Zen", window=None, pos=_vertical_max(0.17, 0.85)),
         AppArrangement(app="Slack", window=None, pos=_vertical_max(0.55, 1)),
         AppArrangement(app="Ghostty", window=None, pos=_vertical_max(0, 0.5)),
         AppArrangement(app="WezTerm", window=None, pos=_vertical_max(0, 0.5)),
@@ -153,7 +153,7 @@ _app_arrangements = {
         # TODO, same as single atm
         AppArrangement(app="Fastmail", window=None, pos=_vertical_max(0.08, 0.59)),
         AppArrangement(app="Gram", window=None, pos=_maximized),
-        AppArrangement(app="Arc", window=None, pos=_vertical_max(0.17, 0.85)),
+        AppArrangement(app="Zen", window=None, pos=_vertical_max(0.17, 0.85)),
         AppArrangement(app="Slack", window=None, pos=_vertical_max(0.55, 1)),
         AppArrangement(app="Ghostty", window=None, pos=_vertical_max(0, 0.5)),
         AppArrangement(app="WezTerm", window=None, pos=_vertical_max(0, 0.5)),

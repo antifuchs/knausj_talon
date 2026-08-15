@@ -3,7 +3,7 @@ key(shift-alt-ctrl-cmd-1):
   user.just_activate_preferred_n("Gram", "Code")
 
 key(shift-alt-ctrl-cmd-2):
-  user.just_activate("/Applications/Arc.app")
+  user.just_activate("/Applications/Zen.app")
 
 key(shift-alt-ctrl-cmd-3):
   user.just_activate("/Applications/Ghostty.app")
